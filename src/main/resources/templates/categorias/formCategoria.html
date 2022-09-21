@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head th:replace="layout/layout :: head"></head>	
+	<body>
+		<header th:replace="layout/layout :: header"></header>
+	
+		<main role="main">
+			<hr>
+			<div class="container"> 			
+				<div class="card">
+					<h4 class="card-header"><strong th:text="${mensajeH4}"></strong></h4>              
+					<div class="card-body">
+						<form th:action="@{/categorias/save}" method="post" th:object="${categoria}">
+							<div class="row">
+								<div class="col-md-6"> 
+									<div class="form-group">
+										<label for="nombre">Nombre</label>
+										<input type="text" class="form-control" th:field="*{nombre}" id="nombre" name="nombre" placeholder="Escriba el nombre de la categoria" required="required">
+									</div>
+								</div>                
+							</div> 
+							<div class="row">
+								<div class="col-md-6"> 
+									<div class="form-group">
+										<label for="descripcion">Descripción</label>
+										<textarea class="form-control" th:field="*{descripcion}" name="descripcion" id="descripcion" rows="2"></textarea>
+									</div> 
+								</div>                
+							</div> 
+							<hr>
+							<input type="hidden" th:field="*{id}" id="id" name="id">
+							<button type="submit" title="Guardar el registro." class="btn btn-primary">Guardar</button>  
+						</form>
+					</div>
+				</div>
+			</div>		
+		</main>
+	
+	   <footer th:replace="layout/layout :: footer" class="footer"></footer>
+	</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="layout/layout :: head"></head>
+	
+	<body>
+	
+		<header th:replace="layout/layout :: header"></header>
+	
+		<main role="main">
+			<!-- Main jumbotron for a primary marketing message or call to action -->
+			<div class="jumbotron">
+				<div class="container">
+					<h3>Encuentra el trabajo que andas buscando.</h3>
+					Puedes buscar por descripción y categoría.
+					<form class="form-inline" th:action="@{/search}" method="get" th:object="${search}">
+						<input type="text" class="form-control mb-3"
+							th:field="*{descripcion}" id="descripcion" placeholder="Escriba una búsqueda">&nbsp;
+						<select th:field="*{categoria.id}" class="custom-select custom-select mb-3">
+							<option th:value="${null}" selected>Seleccione una categoría</option>
+							<option th:each="categoria :  ${categorias}"
+									th:value="${categoria.id}"
+									th:text="${categoria.nombre}"></option>
+						</select>&nbsp;
+						<button type="submit" class="btn btn-primary mb-3">Buscar</button>
+					</form>
+				</div>
+			</div>
+			<hr>
+	
+			<div class="container">
+				<h2 class="font-weight-bold text-center text-capitalize">DESTACADOS</h2>
+				<hr>
+				
+				<div class="row" th:each="vacante : ${vacantes}">
+					<div class="col-md-3">
+						<img class="rounded mx-auto d-block" th:src="@{'/logos/' + ${vacante.imagen}}" alt="Generic placeholder image" width="200">
+					</div>
+					<div class="col-md-9">
+						<h2 th:text="${vacante.nombre}"></h2>
+						<h6 class="card-title">
+							<strong>Categoría: </strong><span>Arquitectura</span>
+						</h6>
+						<h6 class="card-title">
+							<strong>Publicado: </strong><span th:text="${#dates.format(vacante.fecha, 'dd-MM-yyyy')}"></span>
+						</h6>
+						<p th:text="${vacante.descripcion}"></p>
+						<p><a class="btn btn-secondary" th:href="@{'/vacantes/view/' + ${vacante.id}}" role="button">Detalles &raquo;</a></p>
+					</div>
+				</div>
+	
+				<hr>
+			</div>
+			<!-- /container -->
+		</main>
+	
+		<footer th:replace="layout/layout :: footer" class="footer"></footer>
+	
+	</body>
+</html>

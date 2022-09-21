@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+
+	<main role="main">
+		<hr>
+		<div class="container">
+			<div class="card">
+				<h4 class="card-header">
+					<strong th:text="${mensajeH4}"></strong>
+				</h4>
+				<div class="card-body">
+					<hr>
+					<div th:if="${msg != null}" class='alert alert-success'
+						th:text="${msg}" role='alert'></div>
+					<table class="table table-hover">
+						<thead class="thead-light">
+							<tr>
+								<th scope="col">Nombre</th>
+								<th scope="col">Username</th>
+								<th scope="col">Email</th>
+								<th scope="col">Estatus</th>
+								<th scope="col">Operaciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="usuario : ${usuarios}">
+								<td th:text="${usuario.nombre}"></td>
+								<td th:text="${usuario.username}"></td>
+								<td th:text="${usuario.email}"></td>
+								<td th:text="${usuario.estatus == 1 ? 'Activo' : 'Bloqueado' }"></td>
+
+								<td><a th:href="@{/usuarios/delete/{id} (id=${usuario.id}) }"
+										onclick="return confirm('¿Estas seguro?')"
+										class="btn btn-danger btn-sm" role="button" title="Eliminar"><i
+											class="fas fa-trash" aria-hidden="true"></i></a> 
+									<span th:switch="${usuario.estatus}">
+										<a th:case="'1'" th:href="@{/usuarios/lock/{id} (id=${usuario.id}) }" 
+											onclick="return confirm('¿Quiere bloquear el acceso al usuario?')" 
+											class="btn btn-success btn-sm" role="button" 
+											title="Bloquear el acceso al sistema para este usuario.">
+												<i class="fas fa-lock" aria-hidden="true"></i>
+										</a>	
+										<a th:case="'0'" th:href="@{/usuarios/unlock/{id} (id=${usuario.id}) }" 
+											onclick="return confirm('¿Desea desbloquear el usuario?')" 
+											class="btn btn-success btn-sm" role="button" 
+											title="Permitir el acceso al sistema a este usuario.">
+											<i class="fas fa-unlock" aria-hidden="true"></i>
+										</a>
+									</span>
+								</td>
+								
+							</tr>
+						</tbody>
+					</table>
+					
+					<nav th:if="${usuarios.totalPages > 0}" aria-label="Page navigation example" >
+						<ul class="pagination justify-content-center">
+							<li class="page-item" th:classappend="${usuarios.number == 0 ? 'disabled' : ''}">
+								<a th:href="@{/usuarios/indexPaginate(page=${usuarios.number - 1})}" class="page-link">Anterior</a>
+							</li>
+							<li class="page-item" th:classappend="${i eq usuarios.number + 1} ? 'active'" th:each="i : ${#numbers.sequence(1, usuarios.totalPages, 1)}">
+								<a th:href="@{/usuarios/indexPaginate?page={tmpPag} (tmpPag=${i - 1})}" th:text="${i}" th:title="${'Page ' + i}" class="page-link" data-toggle="tooltip"></a>
+							</li>
+							<li class="page-item" th:classappend="${usuarios.number == (usuarios.totalPages - 1) ? 'disabled' : ''}">
+								<a th:href="@{/usuarios/indexPaginate(page=${usuarios.number + 1})}" class="page-link">Siguiente</a>
+							</li>
+						</ul>
+					</nav>
+					
+				</div> <!-- Cierra el cardbody -->
+			</div> <!-- Cierra el card -->
+		</div> <!-- Cierra el container -->
+	</main>
+
+	<footer th:replace="layout/layout :: footer" class="footer"></footer>
+
+</body>
+</html>
